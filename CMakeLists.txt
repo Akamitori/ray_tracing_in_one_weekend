@@ -7,4 +7,6 @@ add_executable(raytracing main.cpp
         vec3.cpp
         vec3.h
         color.cpp
-        color.h)
+        color.h
+        ray.cpp
+        ray.h)
