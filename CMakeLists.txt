@@ -9,4 +9,6 @@ add_executable(raytracing main.cpp
         color.cpp
         color.h
         ray.cpp
-        ray.h)
+        ray.h
+        RedirectOutput.cpp
+        RedirectOutput.h)

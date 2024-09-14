@@ -2,25 +2,8 @@
 #include <fstream>
 #include "color.h"
 #include "ray.h"
+#include "RedirectOutput.h"
 
-class RedirectOutput {
-public:
-    RedirectOutput(const std::string& filename) : file(filename) {
-        // Save the original buffer
-        originalBuffer = std::cout.rdbuf();
-        // Redirect cout to the file stream
-        std::cout.rdbuf(file.rdbuf());
-    }
-
-    // Restore the original buffer when the object goes out of scope
-    ~RedirectOutput() {
-        std::cout.rdbuf(originalBuffer);
-    }
-
-private:
-    std::ofstream file;
-    std::streambuf* originalBuffer;
-};
 
 color ray_color(const ray &r) {
     auto unit_direction = unit_vector(r.direction());
