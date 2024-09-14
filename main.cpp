@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include "color.h"
 
 int main() {
     int image_width = 256;
@@ -10,17 +11,15 @@ int main() {
     std::cout << max_color_value << "\n";
 
     for (int j = 0; j < image_height; j++) {
+        std::clog << "\rScanlines remaining" << (image_height - j) << ' ' << std::flush;
         for (int i = 0; i < image_width; i++) {
-            std::clog << "\rScanlines remaining" << (image_height - j) << ' ' << std::flush;
+            
             auto r = static_cast<double>(i) / static_cast<double>(image_width - 1);
             auto g = static_cast<double>(j) / static_cast<double>(image_height - 1);
             auto b = 0.0;
 
-            int ir = static_cast<int>(255.999 * r);
-            int ig = static_cast<int>(255.999 * g);
-            int ib = static_cast<int>(255.999 * b);
-
-            std::cout << ir << ' ' << ig << ' ' << ib << '\n';
+            auto pixel_color=color{r, g, b};
+            write_color(std::cout, pixel_color);
         }
     }
 
