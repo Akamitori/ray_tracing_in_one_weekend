@@ -8,6 +8,7 @@
 #include <cassert>
 
 #include "ray.h"
+#include "interval.h"
 
 
 class hit_record {
@@ -15,7 +16,7 @@ public:
     point3 p;
     vec3 normal;
     double t{};
-    bool front_face;
+    bool front_face{};
 
     void set_face_normal(const ray &r, const vec3 &outward_normal) {
         assert(std::fabs(outward_normal.length() - 1.0) <= 1e-9);
@@ -25,11 +26,13 @@ public:
     }
 };
 
+
+
 class hittable {
 public:
     virtual ~hittable() = default;
 
-    virtual bool hit(const ray &r, double ray_t_min, double ray_t_max, hit_record &rec) const = 0;
+    virtual bool hit(const ray &r, interval ray_t, hit_record &rec) const = 0;
 };
 
 

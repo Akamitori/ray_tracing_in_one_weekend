@@ -1,50 +1,21 @@
-﻿#include <iostream>
-#include <fstream>
-#include "color.h"
-#include "ray.h"
-#include "RedirectOutput.h"
+﻿
+#include <iostream>
+
+#include "rtweekend.h"
+#include "hittable.h"
+#include "hittable_list.h"
 #include "sphere.h"
+#include "RedirectOutput.h"
 
-double hit_sphere(const point3 &center, const double radius, const ray &r) {
-    const vec3 oc = center - r.origin();
-
-    const auto a = r.direction().length_squared();
-    const auto h=  dot(r.direction(),oc);
-    const auto c = oc.length_squared() - radius * radius;
-    
-    const auto discriminant = h*h-a*c;
-
-    if (discriminant < 0) {
-        return -1.0;
+color ray_color(const ray& r, const hittable& world) {
+    hit_record rec;
+    if (world.hit(r, interval(0, infinity), rec)) {
+        return 0.5 * (rec.normal + color(1,1,1));
     }
 
-    return (h - std::sqrt(discriminant)) / a;
-}
-
-color ray_color(const ray &r) {
-    auto s=sphere{point3{0, 0, -1},0.5};
-
-    hit_record result;
-    if(s.hit(r,0,100,result)) {
-        vec3 N=result.normal;
-        return 0.5 * color{N.x() + 1, N.y() + 1, N.z() + 1};
-    }
-    // auto t = hit_sphere(point3{0, 0, -1}, 0.5, r);
-    // if (t > 0.0) {
-    //     
-    //     auto sphere_center=vec3{0, 0, -1};
-    //     // calcuate the normal which is [Ray at intersection point calculated by t] - [sphere center]
-    //     vec3 N = unit_vector(r.at(t) - sphere_center);
-    //
-    //     // add +1 to all parts of the vector
-    //     // this changes the range of each value from [-1,1] to [0,2]
-    //     // then multiply by 0.5 to get to the range of [0,1] so we can map to colors
-    //     return 0.5 * color{N.x() + 1, N.y() + 1, N.z() + 1};
-    // }
-
-    auto unit_direction = unit_vector(r.direction());
-    auto a = 0.5 * (unit_direction.y() + 1.0);
-    return (1.0 - a) * color(1.0, 1.0, 1.0) + a * color(0.5, 0.7, 1.0);
+    vec3 unit_direction = unit_vector(r.direction());
+    auto a = 0.5*(unit_direction.y() + 1.0);
+    return (1.0-a)*color(1.0, 1.0, 1.0) + a*color(0.5, 0.7, 1.0);
 }
 
 int main() {
@@ -55,6 +26,14 @@ int main() {
     // width/height = aspect ratio therefore height= width/aspect;
     int image_height = static_cast<int>(image_width / aspect_ratio);
     image_height = image_height < 1 ? 1 : image_height;
+
+    // World
+
+    // World
+
+    hittable_list world;
+    world.add(std::make_shared<sphere>(point3(0,0,-1), 0.5));
+    world.add(std::make_shared<sphere>(point3(0,-100.5,-1), 100));
 
 
     //----------------Camera------------------------
@@ -100,7 +79,7 @@ int main() {
             auto ray_direction = pixel_center - camera_center;
             ray r{camera_center, ray_direction};
 
-            color pixel_color = ray_color(r);
+            color pixel_color = ray_color(r,world);
             write_color(std::cout, pixel_color);
         }
     }

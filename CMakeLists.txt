@@ -4,15 +4,20 @@ project(ray_tracing_in_one_weekend)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(raytracing main.cpp
-        vec3.cpp
+        rtweekend.h
         vec3.h
+        vec3.cpp
         color.cpp
         color.h
         ray.cpp
         ray.h
         RedirectOutput.cpp
         RedirectOutput.h
-        hittable.cpp
         hittable.h
         sphere.cpp
-        sphere.h)
+        sphere.h
+        hittable_list.h
+        hittable_list.cpp
+        interval.cpp
+        interval.h
+)
