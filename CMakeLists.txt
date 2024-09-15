@@ -11,4 +11,8 @@ add_executable(raytracing main.cpp
         ray.cpp
         ray.h
         RedirectOutput.cpp
-        RedirectOutput.h)
+        RedirectOutput.h
+        hittable.cpp
+        hittable.h
+        sphere.cpp
+        sphere.h)

@@ -3,6 +3,7 @@
 #include "color.h"
 #include "ray.h"
 #include "RedirectOutput.h"
+#include "sphere.h"
 
 double hit_sphere(const point3 &center, const double radius, const ray &r) {
     const vec3 oc = center - r.origin();
@@ -21,18 +22,25 @@ double hit_sphere(const point3 &center, const double radius, const ray &r) {
 }
 
 color ray_color(const ray &r) {
-    auto t = hit_sphere(point3{0, 0, -1}, 0.5, r);
-    if (t > 0.0) {
-        
-        auto sphere_center=vec3{0, 0, -1};
-        // calcuate the normal which is [Ray at intersection point calculated by t] - [sphere center]
-        vec3 N = unit_vector(r.at(t) - sphere_center);
+    auto s=sphere{point3{0, 0, -1},0.5};
 
-        // add +1 to all parts of the vector
-        // this changes the range of each value from [-1,1] to [0,2]
-        // then multiply by 0.5 to get to the range of [0,1] so we can map to colors
+    hit_record result;
+    if(s.hit(r,0,100,result)) {
+        vec3 N=result.normal;
         return 0.5 * color{N.x() + 1, N.y() + 1, N.z() + 1};
     }
+    // auto t = hit_sphere(point3{0, 0, -1}, 0.5, r);
+    // if (t > 0.0) {
+    //     
+    //     auto sphere_center=vec3{0, 0, -1};
+    //     // calcuate the normal which is [Ray at intersection point calculated by t] - [sphere center]
+    //     vec3 N = unit_vector(r.at(t) - sphere_center);
+    //
+    //     // add +1 to all parts of the vector
+    //     // this changes the range of each value from [-1,1] to [0,2]
+    //     // then multiply by 0.5 to get to the range of [0,1] so we can map to colors
+    //     return 0.5 * color{N.x() + 1, N.y() + 1, N.z() + 1};
+    // }
 
     auto unit_direction = unit_vector(r.direction());
     auto a = 0.5 * (unit_direction.y() + 1.0);
