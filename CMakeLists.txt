@@ -20,4 +20,6 @@ add_executable(raytracing main.cpp
         hittable_list.cpp
         interval.cpp
         interval.h
+        camera.cpp
+        camera.h
 )
