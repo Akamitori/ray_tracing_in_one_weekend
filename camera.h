@@ -14,6 +14,7 @@ public:
     double aspect_ratio = 1.0;  // Ratio of image width over height
     int    image_width  = 100;  // Rendered image width in pixel count
     int samples_per_pixel=10;
+    int max_depth=10;
 
     
 
@@ -28,7 +29,7 @@ private:
     
     
     void initialize();
-    [[nodiscard]] static color ray_color(const ray& r, const hittable& world);
+    [[nodiscard]] static color ray_color(const ray& r, int depth, const hittable& world);
     [[nodiscard]] ray get_ray(int i, int j) const;
     [[nodiscard]] static vec3 sample_square() ;
 };

@@ -22,4 +22,6 @@ add_executable(raytracing main.cpp
         interval.h
         camera.cpp
         camera.h
+        material.cpp
+        material.h
 )

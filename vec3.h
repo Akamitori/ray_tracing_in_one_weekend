@@ -1,5 +1,6 @@
 ﻿#ifndef VEC3_H
 #define VEC3_H
+#include <assert.h>
 #include <ostream>
 
 
@@ -32,6 +33,12 @@ public:
     [[nodiscard]] double length() const;
 
     [[nodiscard]] double length_squared() const;
+
+    [[nodiscard]] bool near_zero() const;
+
+    static vec3 random();
+
+    static vec3 random(double min, double max);
 };
 
 // point3 is just an alias for vec3, but useful for geometric clarity in the code.
@@ -101,6 +108,31 @@ inline vec3 cross(const vec3 &lhs, const vec3 &rhs) {
 
 inline vec3 unit_vector(const vec3 &v) {
     return v / v.length();
+}
+
+inline vec3 random_unit_vector() {
+    while (true) {
+        auto p = vec3::random(-1, 1);
+        auto lensq = p.length_squared();
+        // avoid extremely small vector errors
+        if (1e-160 < lensq && lensq <= 1) {
+            return p / sqrt(lensq);
+        }
+    }
+}
+
+inline vec3 random_on_hemisphere(const vec3 &normal) {
+    vec3 on_unit_sphere = random_unit_vector();
+    if (dot(on_unit_sphere, normal) > 0) {
+        return on_unit_sphere;
+    } else {
+        return -on_unit_sphere;
+    }
+}
+
+inline vec3 reflect(const vec3& v, const vec3&n) {
+    assert(std::fabs(n.length() - 1.0) <= 1e-9);
+    return v-2*dot(v,n)*n;
 }
 
 #endif
