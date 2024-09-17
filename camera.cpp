@@ -11,10 +11,13 @@
 #include "rtweekend.h"
 #include <omp.h>
 #include <atomic>
+#include <thread>
+#include <atomic>
+#include <mutex>
+#include <functional>
 
 void camera::render(const hittable &world, const bool redirect_output) {
     initialize();
-
 
     auto redirect = new RedirectOutput("output.ppm");
 
@@ -22,6 +25,9 @@ void camera::render(const hittable &world, const bool redirect_output) {
         delete redirect;
         redirect = nullptr;
     }
+
+    // Mutex for progress printing
+    std::mutex print_mutex;
 
     int max_color_value = 255;
     std::cout << "P3\n";
@@ -31,38 +37,62 @@ void camera::render(const hittable &world, const bool redirect_output) {
     std::atomic<int> completed_scanlines(0);
     std::vector<color> image_color(image_height * image_width);
 
-#pragma omp parallel for schedule(dynamic, 10), collapse(2)
-    for (int j = 0; j < image_height; j++) {
-        //std::clog << "\rScanlines remaining" << (image_height - j) << ' ' << std::flush;
+    // Number of threads to use
+    const int num_threads = std::thread::hardware_concurrency();
+    std::vector<std::thread> threads;
 
-        for (int i = 0; i < image_width; i++) {
-            color pixel_color(0, 0, 0);
-            for (int sample = 0; sample < samples_per_pixel; sample++) {
-                ray r = get_ray(i, j);
-                pixel_color += ray_color(r, max_depth, world);
-            }
-            image_color[j * image_width + i] = pixel_samples_scale * pixel_color;
-        }
+    // Calculate chunk size
+    int chunk_size = image_height / num_threads;
 
-        // Atomically increment the scanline counter
-        ++completed_scanlines;
-
-        // Periodically print progress
-        if (j % 10 == 0) {  // Print every 10 scanlines
-#pragma omp critical
-            {
-                std::clog << "\rScanlines remaining: " << (image_height - completed_scanlines) << ' ' << std::flush;
-            }
-        }
+    // Create and launch threads
+    for (int t = 0; t < num_threads; ++t) {
+        int start_row = t * chunk_size;
+        int end_row = (t == num_threads - 1) ? image_height : start_row + chunk_size;
+        threads.emplace_back(render_section,
+                             this,
+                             start_row,
+                             end_row,
+                             std::ref(world),
+                             std::ref(image_color),
+                             std::ref(completed_scanlines), std::ref(print_mutex));
     }
 
-    for (auto &pixel: image_color) {
+    // Join all threads
+    for (auto &th: threads) {
+        th.join();
+    }
+
+    for (const auto &pixel: image_color) {
         write_color(std::cout, pixel);
     }
 
     std::clog << "\rDone.                \n";
 
     delete redirect;
+}
+
+void camera::render_section(camera *camera, int start_row, int end_row, const hittable &world,
+                            std::vector<color> &image_color,
+                            std::atomic<int> &completed_scanlines, std::mutex &print_mutex) {
+    for (int j = start_row; j < end_row; j++) {
+        for (int i = 0; i < camera->image_width; i++) {
+            color pixel_color(0, 0, 0);
+            for (int sample = 0; sample < camera->samples_per_pixel; sample++) {
+                ray r = camera->get_ray(i, j);
+                pixel_color += ray_color(r, camera->max_depth, world);
+            }
+            image_color[j * camera->image_width + i] = camera->pixel_samples_scale * pixel_color;
+        }
+
+        // Atomically increment the scanline counter
+        ++completed_scanlines;
+
+        // Periodically print progress
+        if (j % 10 == 0) {
+            std::lock_guard<std::mutex> guard(print_mutex);
+            std::clog << "\rScanlines remaining: " << (camera->image_height - completed_scanlines) << ' ' << std::flush;
+        }
+    }
 }
 
 
@@ -166,3 +196,5 @@ point3 camera::defocus_disk_sample() const {
     auto p = random_in_unit_disk();
     return center + (p[0] * defocus_disk_u) + (p[1] * defocus_disk_v);
 }
+
+

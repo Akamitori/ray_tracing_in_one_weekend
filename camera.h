@@ -6,6 +6,8 @@
 #define CAMERA_H
 
 
+#include <mutex>
+
 #include "color.h"
 #include "hittable.h"
 
@@ -42,6 +44,11 @@ private:
 
     void initialize();
 
+    static void
+    render_section(camera *camera, int start_row, int end_row, const hittable &world, std::vector<color> &image_color,
+                   std::atomic<int> &completed_scanlines, std::mutex &print_mutex);
+
+
     [[nodiscard]] static color ray_color(const ray &r, int depth, const hittable &world);
 
     [[nodiscard]] ray get_ray(int i, int j) const;
@@ -49,6 +56,8 @@ private:
     [[nodiscard]] static vec3 sample_square();
 
     [[nodiscard]]point3 defocus_disk_sample() const;
+
+
 };
 
 
