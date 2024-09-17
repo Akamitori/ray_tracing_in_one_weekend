@@ -5,10 +5,12 @@
 #include "camera.h"
 
 #include <iostream>
+#include <sstream>
 
 #include "material.h"
 #include "RedirectOutput.h"
 #include "rtweekend.h"
+#include <omp.h>
 
 void camera::render(const hittable &world, const bool redirect_output) {
     initialize();
@@ -21,14 +23,17 @@ void camera::render(const hittable &world, const bool redirect_output) {
         redirect = nullptr;
     }
 
-
     int max_color_value = 255;
     std::cout << "P3\n";
     std::cout << image_width << ' ' << image_height << "\n";
     std::cout << max_color_value << "\n";
 
+    std::atomic<int> completed_scanlines(0); 
+    std::vector<color> image_color(image_height * image_width);
+
+#pragma omp parallel for schedule(dynamic, 10), collapse(2)
     for (int j = 0; j < image_height; j++) {
-        std::clog << "\rScanlines remaining" << (image_height - j) << ' ' << std::flush;
+        //std::clog << "\rScanlines remaining" << (image_height - j) << ' ' << std::flush;
 
         for (int i = 0; i < image_width; i++) {
             color pixel_color(0, 0, 0);
@@ -36,8 +41,23 @@ void camera::render(const hittable &world, const bool redirect_output) {
                 ray r = get_ray(i, j);
                 pixel_color += ray_color(r, max_depth, world);
             }
-            write_color(std::cout, pixel_samples_scale * pixel_color);
+            image_color[j * image_width + i] = pixel_samples_scale * pixel_color;
         }
+
+        // Atomically increment the scanline counter
+        ++completed_scanlines;
+
+        // Periodically print progress
+        if (j % 10 == 0) {  // Print every 10 scanlines
+#pragma omp critical
+            {
+                std::clog << "\rScanlines remaining: " << (image_height - completed_scanlines) << ' ' << std::flush;
+            }
+        }
+    }
+
+    for (auto &pixel: image_color) {
+        write_color(std::cout, pixel);
     }
 
     std::clog << "\rDone.                \n";
