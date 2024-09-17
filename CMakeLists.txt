@@ -3,6 +3,15 @@ project(ray_tracing_in_one_weekend)
 
 set(CMAKE_CXX_STANDARD 20)
 
+# Set default build type to Release if not specified
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build, options are: Debug Release" FORCE)
+endif()
+
+# Add configuration for Debug and Release modes
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
 add_executable(raytracing main.cpp
         rtweekend.h
         vec3.h
