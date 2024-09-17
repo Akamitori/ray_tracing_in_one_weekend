@@ -6,6 +6,7 @@
 #define HITTABLE_H
 
 #include <cassert>
+#include <memory>
 
 #include "ray.h"
 #include "interval.h"
@@ -25,10 +26,9 @@ public:
         assert(std::fabs(outward_normal.length() - 1.0) <= 1e-9);
 
         front_face = dot(r.direction(), outward_normal) < 0;
-        normal = front_face? outward_normal : -outward_normal;
+        normal = front_face ? outward_normal : -outward_normal;
     }
 };
-
 
 
 class hittable {

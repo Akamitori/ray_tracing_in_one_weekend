@@ -7,7 +7,7 @@
 
 #include "rtweekend.h"
 
-vec3::vec3(): e{0, 0, 0} {
+vec3::vec3() : e{0, 0, 0} {
 }
 
 vec3::vec3(const double e0, const double e1, const double e2) : e{e0, e1, e2} {
@@ -74,16 +74,16 @@ bool vec3::near_zero() const {
 
 vec3 vec3::random() {
     return {
-        random_double(),
-        random_double(),
-        random_double()
+            random_double(),
+            random_double(),
+            random_double()
     };
 }
 
 vec3 vec3::random(double min, double max) {
     return {
-        random_double(min, max),
-        random_double(min, max),
-        random_double(min, max)
+            random_double(min, max),
+            random_double(min, max),
+            random_double(min, max)
     };
 }

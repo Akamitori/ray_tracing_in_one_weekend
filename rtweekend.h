@@ -1,5 +1,6 @@
 ﻿#ifndef RTWEEKEND_H
 #define RTWEEKEND_H
+
 #include <limits>
 #include <random>
 
@@ -26,8 +27,8 @@ inline double random_double(double min, double max) {
     // Create a random number generator
     static std::random_device rd;  // Seed generator
     static std::mt19937 gen(rd()); // Mersenne Twister engine
-    std::uniform_real_distribution<double> dis(0.0, 1.0); // Uniform distribution in [0, 1)
-    
+    std::uniform_real_distribution<double> dis(min, max); // Uniform distribution in [0, 1)
+
     return dis(gen);
 }
 

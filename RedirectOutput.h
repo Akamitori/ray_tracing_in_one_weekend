@@ -11,18 +11,15 @@
 
 class RedirectOutput {
 public:
-    RedirectOutput(const std::string& filename);
+    explicit RedirectOutput(const std::string &filename);
 
     // Restore the original buffer when the object goes out of scope
     ~RedirectOutput();
 
 private:
     std::ofstream file;
-    std::streambuf* originalBuffer;
+    std::streambuf *originalBuffer;
 };
-
-
-
 
 
 #endif //REDIRECTOUTPUT_H

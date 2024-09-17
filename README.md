@@ -1,16 +1,17 @@
-
 # Ray Tracing in One Weekend
 
-A C++ implementation of the book **[Ray Tracing in One Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)** by Peter Shirley.
+A C++ implementation of the book *
+*[Ray Tracing in One Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)** by Peter Shirley.
 
 ![alt text](https://github.com/Akamitori/ray_tracing_in_one_weekend/blob/master/final_result.jpg)
-            
 
 ## Overview
 
-This project walks through the basics of ray tracing, following the structure from the book. It covers core concepts like rays, materials, lighting, and advanced features like anti-aliasing and defocus blur.
+This project walks through the basics of ray tracing, following the structure from the book. It covers core concepts
+like rays, materials, lighting, and advanced features like anti-aliasing and defocus blur.
 
 Key features:
+
 - **Basic Ray Tracing**: Render simple scenes with spheres and basic lighting.
 - **Materials**: Add realism with diffuse, reflective, and transparent materials.
 - **Anti-Aliasing**: Smooth edges with multi-sampling.
@@ -43,19 +44,20 @@ Key features:
    ```
 
 3. **Build Configurations**:
-   - By default, CMake builds in **Debug mode**, which includes extra debugging symbols and performs less aggressive optimizations.
+    - By default, CMake builds in **Debug mode**, which includes extra debugging symbols and performs less aggressive
+      optimizations.
 
-   - To build in **Release mode** for better performance:
-     ```shell
-     cmake -DCMAKE_BUILD_TYPE=Release ..
-     make
-     ```
+    - To build in **Release mode** for better performance:
+      ```shell
+      cmake -DCMAKE_BUILD_TYPE=Release ..
+      make
+      ```
 
-   - To build in **Debug mode** (if needed):
-     ```shell
-     cmake -DCMAKE_BUILD_TYPE=Debug ..
-     make
-     ```
+    - To build in **Debug mode** (if needed):
+      ```shell
+      cmake -DCMAKE_BUILD_TYPE=Debug ..
+      make
+      ```
 
 ### Running
 
@@ -70,22 +72,27 @@ The output image will be generated as a `.ppm` file with the name `output.ppm`.
 ## Viewing the output
 
 The output can be viewed with any photo processing program or by using [IrfanView](https://www.irfanview.com/)
-or by using this online [PPM viewer](https://www.cs.rhodes.edu/welshc/COMP141_F16/ppmReader.html) 
+or by using this online [PPM viewer](https://www.cs.rhodes.edu/welshc/COMP141_F16/ppmReader.html)
 
 ## Performance notes
-Since this is a brute force raytracer it is bound to be slow. The commited code issues the high res settings needed to produce the image. This generation will take about 1hour on release build.
+
+Since this is a brute force raytracer it is bound to be slow. The commited code issues the high res settings needed to
+produce the image. This generation will take about 1hour on release build.
 This can be sped up by sacrificing some quality in our generation.
-Replace this in `main.cpp` 
+Replace this in `main.cpp`
+
 ```C++
     cam.image_width = 1200;
-    cam.samples_per_pixel = 500;
-    cam.max_depth = 50;
+cam.samples_per_pixel = 500;
+cam.max_depth = 50;
 ```
+
 with
+
 ```C++
     cam.image_width = 1200;     // we can also reduce image widgh by this is bound to not draw some spheres
-    cam.samples_per_pixel = 100;
-    cam.max_depth = 10;
+cam.samples_per_pixel = 100;
+cam.max_depth = 10;
 ```
 
 ## License

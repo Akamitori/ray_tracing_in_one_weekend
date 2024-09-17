@@ -8,11 +8,10 @@
 #include <ostream>
 #include "vec3.h"
 
-using color=vec3;
+using color = vec3;
 
 
-void write_color(std::ostream& os, const color& pixel_color);
-
+void write_color(std::ostream &os, const color &pixel_color);
 
 
 #endif //COLOR_H

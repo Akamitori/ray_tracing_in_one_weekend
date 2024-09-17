@@ -36,8 +36,8 @@ private:
     vec3 pixel_delta_v; // Offset to pixel below
     vec3 u, v, w; // camera frame basis vectors;
 
-    vec3   defocus_disk_u;       // Defocus disk horizontal radius
-    vec3   defocus_disk_v;       // Defocus disk vertical radius
+    vec3 defocus_disk_u;       // Defocus disk horizontal radius
+    vec3 defocus_disk_v;       // Defocus disk vertical radius
 
 
     void initialize();

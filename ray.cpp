@@ -7,14 +7,14 @@
 
 ray::ray() = default;
 
-ray::ray(const point3 &origin, const vec3 &direction): m_origin(origin), m_direction(direction) {
+ray::ray(const point3 &origin, const vec3 &direction) : m_origin(origin), m_direction(direction) {
 }
 
-const point3 & ray::origin() const {
+const point3 &ray::origin() const {
     return m_origin;
 }
 
-const point3 & ray::direction() const {
+const point3 &ray::direction() const {
     return m_direction;
 }
 

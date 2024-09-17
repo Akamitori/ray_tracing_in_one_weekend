@@ -4,8 +4,10 @@
 
 #include "sphere.h"
 
-sphere::sphere(const point3 &center, const double radius, const std::shared_ptr<material> &mat) : center(center),
-                                                                                                  radius(std::fmax(0, radius)), mat(mat) {
+sphere::sphere(const point3 &center, const double radius, const std::shared_ptr<material> &mat) :
+        center(center),
+        radius(std::fmax(0, radius)),
+        mat(mat) {
 }
 
 bool sphere::hit(const ray &r, interval ray_t, hit_record &rec) const {
@@ -39,4 +41,4 @@ bool sphere::hit(const ray &r, interval ray_t, hit_record &rec) const {
     rec.mat = mat;
 
     return true;
-};
+}

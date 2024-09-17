@@ -4,6 +4,7 @@
 
 #ifndef HITTABLE_LIST_H
 #define HITTABLE_LIST_H
+
 #include <vector>
 #include "hittable.h"
 
@@ -24,7 +25,7 @@ public:
     void add(const shared_ptr<hittable> &object);
 
     bool hit(const ray &r, interval ray_t, hit_record &rec) const override;
-    
+
 };
 
 

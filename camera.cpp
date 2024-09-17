@@ -5,12 +5,12 @@
 #include "camera.h"
 
 #include <iostream>
-#include <sstream>
 
 #include "material.h"
 #include "RedirectOutput.h"
 #include "rtweekend.h"
 #include <omp.h>
+#include <atomic>
 
 void camera::render(const hittable &world, const bool redirect_output) {
     initialize();
@@ -28,7 +28,7 @@ void camera::render(const hittable &world, const bool redirect_output) {
     std::cout << image_width << ' ' << image_height << "\n";
     std::cout << max_color_value << "\n";
 
-    std::atomic<int> completed_scanlines(0); 
+    std::atomic<int> completed_scanlines(0);
     std::vector<color> image_color(image_height * image_width);
 
 #pragma omp parallel for schedule(dynamic, 10), collapse(2)
@@ -97,7 +97,7 @@ void camera::initialize() {
 
 
     // Calculate the vectors across the horizontal and down the vertical viewport edges.
-    auto viewport_u = viewport_width * u;;
+    auto viewport_u = viewport_width * u;
     auto viewport_v = -viewport_height * v;
 
     // Calculate the horizontal and vertical delta vectors from pixel to pixel.

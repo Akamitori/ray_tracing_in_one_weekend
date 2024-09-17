@@ -3,7 +3,7 @@
 #include "hittable_list.h"
 #include "material.h"
 #include "sphere.h"
-#include "RedirectOutput.h"
+#include <memory>
 
 
 using std::make_shared;

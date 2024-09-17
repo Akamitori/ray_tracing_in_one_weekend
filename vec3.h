@@ -1,6 +1,7 @@
 ﻿#ifndef VEC3_H
 #define VEC3_H
-#include <assert.h>
+
+#include <cassert>
 #include <ostream>
 
 #include "rtweekend.h"
@@ -14,11 +15,11 @@ public:
 
     vec3(double e0, double e1, double e2);
 
-    double x() const;
+    [[nodiscard]] double x() const;
 
-    double y() const;
+    [[nodiscard]] double y() const;
 
-    double z() const;
+    [[nodiscard]] double z() const;
 
     vec3 operator-() const;
 
@@ -55,33 +56,33 @@ inline std::ostream &operator<<(std::ostream &os, const vec3 &v) {
 
 inline vec3 operator+(const vec3 &lhs, const vec3 &rhs) {
     return vec3{
-        lhs.e[0] + rhs.e[0],
-        lhs.e[1] + rhs.e[1],
-        lhs.e[2] + rhs.e[2]
+            lhs.e[0] + rhs.e[0],
+            lhs.e[1] + rhs.e[1],
+            lhs.e[2] + rhs.e[2]
     };
 }
 
 inline vec3 operator-(const vec3 &lhs, const vec3 &rhs) {
     return vec3{
-        lhs.e[0] - rhs.e[0],
-        lhs.e[1] - rhs.e[1],
-        lhs.e[2] - rhs.e[2]
+            lhs.e[0] - rhs.e[0],
+            lhs.e[1] - rhs.e[1],
+            lhs.e[2] - rhs.e[2]
     };
 }
 
 inline vec3 operator*(const vec3 &lhs, const vec3 &rhs) {
     return vec3{
-        lhs.e[0] * rhs.e[0],
-        lhs.e[1] * rhs.e[1],
-        lhs.e[2] * rhs.e[2]
+            lhs.e[0] * rhs.e[0],
+            lhs.e[1] * rhs.e[1],
+            lhs.e[2] * rhs.e[2]
     };
 }
 
 inline vec3 operator*(const double lhs, const vec3 &rhs) {
     return vec3{
-        rhs.e[0] * lhs,
-        rhs.e[1] * lhs,
-        rhs.e[2] * lhs
+            rhs.e[0] * lhs,
+            rhs.e[1] * lhs,
+            rhs.e[2] * lhs
     };
 }
 
@@ -102,9 +103,9 @@ inline double dot(const vec3 &lhs, const vec3 &rhs) {
 
 inline vec3 cross(const vec3 &lhs, const vec3 &rhs) {
     return vec3{
-        lhs.e[1] * rhs.e[2] - lhs.e[2] * rhs.e[1],
-        lhs.e[2] * rhs.e[0] - lhs.e[0] * rhs.e[2],
-        lhs.e[0] * rhs.e[1] - lhs.e[1] * rhs.e[0]
+            lhs.e[1] * rhs.e[2] - lhs.e[2] * rhs.e[1],
+            lhs.e[2] * rhs.e[0] - lhs.e[0] * rhs.e[2],
+            lhs.e[0] * rhs.e[1] - lhs.e[1] * rhs.e[0]
     };
 }
 

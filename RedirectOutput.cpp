@@ -5,7 +5,7 @@
 #include "RedirectOutput.h"
 #include <iostream>
 
-RedirectOutput::RedirectOutput(const std::string &filename): file(filename) {
+RedirectOutput::RedirectOutput(const std::string &filename) : file(filename) {
     // Save the original buffer
     originalBuffer = std::cout.rdbuf();
     // Redirect cout to the file stream

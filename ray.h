@@ -4,6 +4,7 @@
 
 #ifndef RAY_H
 #define RAY_H
+
 #include "vec3.h"
 
 // Ray is pretty much a function P(t)=A+tb;
@@ -12,19 +13,20 @@
 class ray {
 public:
     ray();
-    ray(const point3& origin, const vec3& direction);
 
-    const point3& origin() const;
-    const point3& direction() const;
+    ray(const point3 &origin, const vec3 &direction);
 
-    point3 at(double t) const;
+    [[nodiscard]] const point3 &origin() const;
+
+    [[nodiscard]] const point3 &direction() const;
+
+    [[nodiscard]] point3 at(double t) const;
 
 private:
     point3 m_origin;
     vec3 m_direction;
-    
-};
 
+};
 
 
 #endif //RAY_H
