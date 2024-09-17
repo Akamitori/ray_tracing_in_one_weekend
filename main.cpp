@@ -1,12 +1,10 @@
-﻿#include <iostream>
-
-#include "camera.h"
+﻿#include "camera.h"
 #include "hittable.h"
 #include "hittable_list.h"
 #include "material.h"
 #include "sphere.h"
 #include "RedirectOutput.h"
-#include "rtweekend.h"
+
 
 using std::make_shared;
 
@@ -38,6 +36,9 @@ int main() {
     cam.lookfrom = point3(-2,2,1);
     cam.lookat   = point3(0,0,-1);
     cam.vup      = vec3(0,1,0);
+
+    cam.defocus_angle = 10;
+    cam.focus_dist    = 3.4;
 
     cam.render(world,true);
 
