@@ -11,29 +11,37 @@
 
 class camera {
 public:
-    double aspect_ratio = 1.0;  // Ratio of image width over height
-    int    image_width  = 100;  // Rendered image width in pixel count
-    int samples_per_pixel=10;
-    int max_depth=10;
+    double aspect_ratio = 1.0; // Ratio of image width over height
+    int image_width = 100; // Rendered image width in pixel count
+    int samples_per_pixel = 10;
+    int max_depth = 10;
 
-    
+    double vfov = 90;
+    point3 lookfrom{0, 0, 0};
+    point3 lookat{0, 0, -1};
+    point3 vup{0, 1, 0};
 
-    void render(const hittable&world, bool redirect_output = false);
+
+    void render(const hittable &world, bool redirect_output = false);
+
 private:
-    int    image_height = 0;   // Rendered image height
+    int image_height = 0; // Rendered image height
     double pixel_samples_scale = 0;
-    point3 center;         // Camera center
-    point3 pixel00_loc;    // Location of pixel 0, 0
-    vec3   pixel_delta_u;  // Offset to pixel to the right
-    vec3   pixel_delta_v;  // Offset to pixel below
-    
-    
-    void initialize();
-    [[nodiscard]] static color ray_color(const ray& r, int depth, const hittable& world);
-    [[nodiscard]] ray get_ray(int i, int j) const;
-    [[nodiscard]] static vec3 sample_square() ;
-};
+    point3 center; // Camera center
+    point3 pixel00_loc; // Location of pixel 0, 0
+    vec3 pixel_delta_u; // Offset to pixel to the right
+    vec3 pixel_delta_v; // Offset to pixel below
+    vec3 u, v, w; // camera frame basis vectors;
 
+
+    void initialize();
+
+    [[nodiscard]] static color ray_color(const ray &r, int depth, const hittable &world);
+
+    [[nodiscard]] ray get_ray(int i, int j) const;
+
+    [[nodiscard]] static vec3 sample_square();
+};
 
 
 #endif //CAMERA_H
