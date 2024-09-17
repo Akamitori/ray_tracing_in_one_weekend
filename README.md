@@ -77,12 +77,12 @@ or by using this online [PPM viewer](https://www.cs.rhodes.edu/welshc/COMP141_F1
 ## Performance notes
 
 Since this is a brute force raytracer it is bound to be slow. The commited code issues the high res settings needed to
-produce the image. This generation will take about 1hour on release build.
+produce the image. This generation will take about 5-10 minutes on release build depending on the number of CPU cores.
 This can be sped up by sacrificing some quality in our generation.
 Replace this in `main.cpp`
 
 ```C++
-    cam.image_width = 1200;
+cam.image_width = 1200;
 cam.samples_per_pixel = 500;
 cam.max_depth = 50;
 ```
@@ -90,7 +90,7 @@ cam.max_depth = 50;
 with
 
 ```C++
-    cam.image_width = 1200;     // we can also reduce image widgh by this is bound to not draw some spheres
+cam.image_width = 1200;     // we can also reduce image widgh by this is bound to not draw some spheres
 cam.samples_per_pixel = 100;
 cam.max_depth = 10;
 ```
