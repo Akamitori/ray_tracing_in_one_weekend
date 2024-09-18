@@ -19,8 +19,6 @@ add_executable(${EXECUTABLE_NAME} main.cpp
         color.h
         ray.cpp
         ray.h
-        RedirectOutput.cpp
-        RedirectOutput.h
         hittable.h
         sphere.cpp
         sphere.h
@@ -32,6 +30,7 @@ add_executable(${EXECUTABLE_NAME} main.cpp
         camera.h
         material.cpp
         material.h
+        benchmarking.h
 )
 
 # Extreme optimization flags for MSVC
@@ -63,11 +62,4 @@ else()
     target_link_options(${EXECUTABLE_NAME} PRIVATE
             $<$<CONFIG:RELEASE>:-flto>
     )
-endif()
-
-
-# Link OpenMP
-find_package(OpenMP)
-if(OpenMP_CXX_FOUND)
-    target_link_libraries(${EXECUTABLE_NAME} PRIVATE OpenMP::OpenMP_CXX)
 endif()
