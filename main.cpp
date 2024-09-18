@@ -9,6 +9,7 @@
 
 
 using std::make_shared;
+
 int main() {
     hittable_list world;
 
@@ -67,16 +68,16 @@ int main() {
     cam.defocus_angle = 0.6;
     cam.focus_dist = 10.0;
 
-    int const thread_con = std::thread::hardware_concurrency();
-    int const thread_number = thread_con <= 0 ? 1 : thread_con;
+    const int thread_con = std::thread::hardware_concurrency();
+    const int thread_number = thread_con <= 0 ? 1 : thread_con;
     const auto benchmark_message = std::format("{} threads", thread_number);
-    auto const result_file = std::format("{}_threads_result_file.ppm", thread_number);
+    const auto result_file = std::format("{}_threads_result_file.ppm", thread_number);
     benchmark(
         benchmark_message,
-        [&cam, world, result_file]() {
+        [&cam, world, thread_number,result_file]() {
             cam.render(world, thread_number, true, result_file);
         }
     );
-    
+
     return 0;
 }
