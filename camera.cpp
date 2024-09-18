@@ -164,25 +164,55 @@ void camera::initialize() {
     defocus_disk_v = v * defocus_radius;
 }
 
+// color camera::ray_color(const ray &r, int depth, const hittable &world) {
+//     if (depth <= 0) {
+//         return color{0, 0, 0};
+//     }
+//
+//     hit_record rec;
+//     if (world.hit(r, interval(0.001, infinity), rec)) {
+//         // get a ray direction that's reflected
+//         ray scattered;
+//         color attenuation;
+//         if (rec.mat->scatter(r, rec, attenuation, scattered)) {
+//             return attenuation * ray_color(scattered, depth - 1, world);
+//         }
+//         return color{0, 0, 0};
+//     }
+//
+//     vec3 unit_direction = unit_vector(r.direction());
+//     auto a = 0.5 * (unit_direction.y() + 1.0);
+//     return (1.0 - a) * color(1.0, 1.0, 1.0) + a * color(0.5, 0.7, 1.0);
+// }
+
 color camera::ray_color(const ray &r, int depth, const hittable &world) {
-    if (depth <= 0) {
-        return color{0, 0, 0};
-    }
+    color accumulated_color(1.0, 1.0, 1.0); // Initialize with white, since we multiply colors
+    ray current_ray = r;
+    int current_depth = depth;
 
-    hit_record rec;
-    if (world.hit(r, interval(0.001, infinity), rec)) {
-        // get a ray direction that's reflected
-        ray scattered;
-        color attenuation;
-        if (rec.mat->scatter(r, rec, attenuation, scattered)) {
-            return attenuation * ray_color(scattered, depth - 1, world);
+    while (current_depth > 0) {
+        hit_record rec;
+
+        if (world.hit(current_ray, interval(0.001, infinity), rec)) {
+            ray scattered;
+            color attenuation;
+            if (rec.mat->scatter(current_ray, rec, attenuation, scattered)) {
+                accumulated_color = accumulated_color * attenuation;
+                current_ray = scattered; // Continue tracing the scattered ray
+            } else {
+                return {0, 0, 0}; // Absorbed, return black
+            }
+        } else {
+            vec3 unit_direction = unit_vector(current_ray.direction());
+            auto a = 0.5 * (unit_direction.y() + 1.0);
+            color sky_color = (1.0 - a) * color(1.0, 1.0, 1.0) + a * color(0.5, 0.7, 1.0);
+            return accumulated_color * sky_color; // Combine accumulated color with sky
         }
-        return color{0, 0, 0};
+
+        current_depth--;
     }
 
-    vec3 unit_direction = unit_vector(r.direction());
-    auto a = 0.5 * (unit_direction.y() + 1.0);
-    return (1.0 - a) * color(1.0, 1.0, 1.0) + a * color(0.5, 0.7, 1.0);
+    return {0, 0, 0}; // Max depth reached, return black
 }
 
 ray camera::get_ray(int i, int j) const {
