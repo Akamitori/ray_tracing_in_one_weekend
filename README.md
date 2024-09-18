@@ -77,7 +77,7 @@ or by using this online [PPM viewer](https://www.cs.rhodes.edu/welshc/COMP141_F1
 ## Performance notes
 
 Since this is a brute force raytracer it is bound to be slow. The commited code issues the high res settings needed to
-produce the image. This generation will take about 5-10 minutes on release build depending on the number of CPU cores.
+produce the image. This generation will take about 5 minutes to 1 hour on release build depending on the number of CPU cores.
 This can be sped up by sacrificing some quality in our generation.
 Replace this in `main.cpp`
 
